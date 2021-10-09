@@ -2,56 +2,56 @@
 
 namespace CodingAssessment.Services.Models
 {
-    internal class GoogleGeolocationResponse
+    public class GoogleGeolocationResponse
     {
         public PlusCode plus_code { get; set; }
         public List<Result>? results { get; set; }
         public string status { get; set; }
 
-        internal class PlusCode
+        public class PlusCode
         {
             public string compound_code { get; set; }
             public string global_code { get; set; }
         }
 
-        internal class AddressComponent
+        public class AddressComponent
         {
             public string long_name { get; set; }
             public string short_name { get; set; }
             public List<string> types { get; set; }
         }
 
-        internal class Location
+        public class Location
         {
             public double lat { get; set; }
             public double lng { get; set; }
         }
 
-        internal class Northeast
+        public class Northeast
         {
             public double lat { get; set; }
             public double lng { get; set; }
         }
 
-        internal class Southwest
+        public class Southwest
         {
             public double lat { get; set; }
             public double lng { get; set; }
         }
 
-        internal class Viewport
+        public class Viewport
         {
             public Northeast northeast { get; set; }
             public Southwest southwest { get; set; }
         }
 
-        internal class Bounds
+        public class Bounds
         {
             public Northeast northeast { get; set; }
             public Southwest southwest { get; set; }
         }
 
-        internal class Geometry
+        public class Geometry
         {
             public Location location { get; set; }
             public string location_type { get; set; }
@@ -59,7 +59,7 @@ namespace CodingAssessment.Services.Models
             public Bounds bounds { get; set; }
         }
 
-        internal class Result
+        public class Result
         {
             public List<AddressComponent> address_components { get; set; }
             public string formatted_address { get; set; }

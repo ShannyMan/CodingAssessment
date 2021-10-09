@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace CodingAssessment.Services.Models
 {
-    internal class OpenWeatherResponse
+    public class OpenWeatherResponse
     {
         public double lat { get; set; }
         public double lon { get; set; }
@@ -11,7 +11,7 @@ namespace CodingAssessment.Services.Models
         public int timezone_offset { get; set; }
         public List<Daily> daily { get; set; }
 
-        internal class Temp
+        public class Temp
         {
             public double day { get; set; }
             public double min { get; set; }
@@ -21,7 +21,7 @@ namespace CodingAssessment.Services.Models
             public double morn { get; set; }
         }
 
-        internal class FeelsLike
+        public class FeelsLike
         {
             public double day { get; set; }
             public double night { get; set; }
@@ -29,7 +29,7 @@ namespace CodingAssessment.Services.Models
             public double morn { get; set; }
         }
 
-        internal class Weather
+        public class Weather
         {
             public int id { get; set; }
             public string main { get; set; }
@@ -37,17 +37,9 @@ namespace CodingAssessment.Services.Models
             public string icon { get; set; }
         }
 
-        internal class Daily
+        public class Daily
         {
-            public DateTime Date
-            {
-                get
-                {
-                    DateTime dateTime = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
-                    dateTime = dateTime.AddSeconds(dt).ToLocalTime();
-                    return dateTime;
-                }
-            }
+            public DateTime Date => DateTimeOffset.FromUnixTimeSeconds(dt).Date;
 
             public int dt { get; set; }
             public int sunrise { get; set; }
