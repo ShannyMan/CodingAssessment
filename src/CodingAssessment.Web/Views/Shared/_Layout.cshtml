@@ -1,0 +1,77 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - CodingAssessment.Web</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <script type="text/javascript">
+        function getGeolocation(txtCityState, lblOutput) {
+            
+            function geoLocationSuccess(position) {
+                debugger;
+                $.ajax({
+                        dataType: 'text',
+                        url: `api/city-state?longitude=${position.coords.longitude}&latitude=${position.coords.latitude}`,
+                        success: function(cityStateLocation) {
+                            txtCityState.value = cityStateLocation;
+                            checkForecast(txtCityState, lblOutput, undefined);
+                        }});
+            }
+            
+            navigator.geolocation.getCurrentPosition(geoLocationSuccess, geoLocationError);
+        }
+
+        function checkForecast(txtCityState, lblOutput, event) {
+            if (!!event) {
+                event.preventDefault();
+            }
+
+            lblOutput.innerHTML = 'Checking...';
+            $.getJSON(`api/muddy-forecast?cityStateLocation=${window.encodeURI(txtCityState.value)}`)
+                .done(function(forecastObject) {
+                    var strVal = '';
+
+                    switch (forecastObject.forecast) {
+                        case 0:
+                            strVal = 'It will not be muddy in 3 days.';
+                            break;
+                        case 1:
+                            strVal = 'It may be muddy in 3 days.';
+                            break;
+                        case 2:
+                            strVal = 'It will most likely be muddy in 3 days.';
+                            break;
+                        case 3:
+                            strVal = `An error occurred: ${forecastObject.message}`;
+                            break;
+                    }
+
+                    lblOutput.innerHTML = strVal;
+                });
+        }
+
+        function geoLocationError(err) {
+            alert(err);
+        }
+    </script>
+</head>
+<body>
+    <div class="container">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+
+    <footer class="border-top footer text-muted">
+        <div class="container">
+            &copy; 2021 - CodingAssessment.Web
+        </div>
+    </footer>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>
