@@ -1,0 +1,18 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Possible Muddy Weather Forecast</h1>
+    <center>
+        <form onsubmit="checkForecast(txtLocation, lblOutput, event);">
+            <input placeholder="Enter a city/state" style="width: 500px;" type="text" id="txtLocation" /> <button type="submit">Check Forecast</button>
+        </form>
+        <br/>
+        <br/>
+        <h1 id="lblOutput">Enter a city/state to check the forecast.</h1>
+    </center>
+</div>
+<script type="text/javascript">
+    txtLocation.onload = getGeolocation(txtLocation, lblOutput);
+</script>
