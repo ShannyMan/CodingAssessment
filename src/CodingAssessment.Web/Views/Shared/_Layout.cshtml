@@ -10,7 +10,6 @@
         function getGeolocation(txtCityState, lblOutput) {
             
             function geoLocationSuccess(position) {
-                debugger;
                 $.ajax({
                         dataType: 'text',
                         url: `api/city-state?longitude=${position.coords.longitude}&latitude=${position.coords.latitude}`,
