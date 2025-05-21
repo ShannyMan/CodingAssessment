@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 
 namespace CodingAssessment.Web.Models
 {
@@ -58,7 +59,7 @@ namespace CodingAssessment.Web.Models
                 "Wichita, KS",
                 "Arlington, TX",
                 "New Orleans, LA"
-            };
+            }.OrderBy(city => city).ToList();
         }
     }
 }
