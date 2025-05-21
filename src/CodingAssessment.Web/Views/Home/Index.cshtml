@@ -7,12 +7,12 @@
     <center>
         <form onsubmit="checkForecast(txtLocation, lblOutput, event);">
             <div class="input-group" style="width: 550px; margin: 0 auto;">
-                <select id="citySelector" class="form-control" style="width: 150px; margin-right: 10px;" onchange="updateLocationInput(this.value)">
+                <select id="citySelector" class="form-control" style="width: 180px;" onchange="updateLocationInput(this.value)">
                     <option value="">Select a city</option>
                 </select>
-                <input placeholder="Enter a city/state" style="width: 350px;" type="text" id="txtLocation" />
+                <input placeholder="Enter a city/state" style="width: 300px;" type="text" id="txtLocation" class="form-control" />
                 <div class="input-group-append">
-                    <button type="button" class="btn btn-outline-secondary" onclick="getGeolocation(txtLocation, lblOutput)">
+                    <button type="button" class="btn btn-outline-secondary" title="Use current location" onclick="getGeolocation(txtLocation, lblOutput)">
                         <i class="fa fa-crosshairs"></i>
                     </button>
                     <button type="submit" class="btn btn-primary">Check Forecast</button>
@@ -49,4 +49,9 @@
             checkForecast(txtLocation, lblOutput, undefined);
         }
     }
+    
+    // Clear city selector when user manually types in the location field
+    document.getElementById('txtLocation').addEventListener('input', function() {
+        document.getElementById('citySelector').value = '';
+    });
 </script>
