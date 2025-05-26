@@ -1,0 +1,100 @@
+﻿@{
+    ViewData["Title"] = "Flight Routes";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Flight Routes from Grand Rapids, MI</h1>
+    <div class="container">
+        <div class="row mb-4">
+            <div class="col">
+                <button id="btnAllFlights" class="btn btn-primary">Show All Flight Routes</button>
+                <button id="btnCheapestFlights" class="btn btn-success">Show Cheapest Flight Routes</button>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <div id="flightRoutesContainer">
+                    <div class="text-center" id="loadingIndicator" style="display: none;">
+                        <div class="spinner-border" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                    </div>
+                    <table class="table table-striped" id="flightRoutesTable" style="display: none;">
+                        <thead>
+                            <tr>
+                                <th>Destination</th>
+                                <th>Airline</th>
+                                <th>Price</th>
+                                <th>Departure</th>
+                                <th>Arrival</th>
+                                <th>Duration</th>
+                                <th>Direct Flight</th>
+                            </tr>
+                        </thead>
+                        <tbody id="flightRoutesTableBody">
+                        </tbody>
+                    </table>
+                    <div id="errorMessage" class="alert alert-danger" style="display: none;"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $('#btnAllFlights').click(function() {
+                loadFlightRoutes('api/flight-routes');
+            });
+            
+            $('#btnCheapestFlights').click(function() {
+                loadFlightRoutes('api/cheapest-flights');
+            });
+            
+            function loadFlightRoutes(endpoint) {
+                $('#flightRoutesTable').hide();
+                $('#errorMessage').hide();
+                $('#loadingIndicator').show();
+                
+                $.getJSON(endpoint)
+                    .done(function(response) {
+                        $('#loadingIndicator').hide();
+                        
+                        if (response.success && response.routes && response.routes.length > 0) {
+                            const tableBody = $('#flightRoutesTableBody');
+                            tableBody.empty();
+                            
+                            response.routes.forEach(function(route) {
+                                const directFlight = route.isDirectFlight ? 'Yes' : 'No';
+                                const price = '$' + parseFloat(route.price).toFixed(2);
+                                
+                                tableBody.append(`
+                                    <tr>
+                                        <td>${route.destination}</td>
+                                        <td>${route.airline}</td>
+                                        <td>${price}</td>
+                                        <td>${route.departureTime}</td>
+                                        <td>${route.arrivalTime}</td>
+                                        <td>${route.duration}</td>
+                                        <td>${directFlight}</td>
+                                    </tr>
+                                `);
+                            });
+                            
+                            $('#flightRoutesTable').show();
+                        } else {
+                            $('#errorMessage').text(response.message || 'No flight routes found.').show();
+                        }
+                    })
+                    .fail(function(jqXHR, textStatus, errorThrown) {
+                        $('#loadingIndicator').hide();
+                        $('#errorMessage').text('Error loading flight routes: ' + errorThrown).show();
+                    });
+            }
+            
+            // Load all flights by default
+            loadFlightRoutes('api/flight-routes');
+        });
+    </script>
+}

@@ -12,12 +12,16 @@ namespace CodingAssessment.Web.Controllers
         private readonly IGoogleGeolocationService _googleGeolocationService;
 
         private readonly IWeatherService _weatherService;
+        
+        private readonly IFlightRouteService _flightRouteService;
 
-        public ApiController(ILogger<ApiController> logger, IGoogleGeolocationService googleGeolocationService, IWeatherService weatherService)
+        public ApiController(ILogger<ApiController> logger, IGoogleGeolocationService googleGeolocationService, 
+            IWeatherService weatherService, IFlightRouteService flightRouteService)
         {
             _logger = logger;
             _googleGeolocationService = googleGeolocationService;
             _weatherService = weatherService;
+            _flightRouteService = flightRouteService;
         }
 
         [HttpGet("api/city-state")]
@@ -61,6 +65,52 @@ namespace CodingAssessment.Web.Controllers
                 return Ok(new Models.MuddyForecastResponse
                 {
                     Forecast = MuddyWeatherForecast.Error,
+                    Message = e.Message
+                });
+            }
+        }
+        
+        [HttpGet("api/flight-routes")]
+        public async Task<IActionResult> GetFlightRoutes(CancellationToken cancellationToken)
+        {
+            try
+            {
+                var routes = await _flightRouteService.GetFlightRoutesFromGrandRapids(cancellationToken);
+                return Ok(new Models.FlightRouteResponse 
+                { 
+                    Routes = routes,
+                    Success = true
+                });
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, "Error calling api/flight-routes");
+                return Ok(new Models.FlightRouteResponse
+                {
+                    Success = false,
+                    Message = e.Message
+                });
+            }
+        }
+        
+        [HttpGet("api/cheapest-flights")]
+        public async Task<IActionResult> GetCheapestFlights(CancellationToken cancellationToken)
+        {
+            try
+            {
+                var routes = await _flightRouteService.GetCheapestFlightRoutes(cancellationToken);
+                return Ok(new Models.FlightRouteResponse 
+                { 
+                    Routes = routes,
+                    Success = true
+                });
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, "Error calling api/cheapest-flights");
+                return Ok(new Models.FlightRouteResponse
+                {
+                    Success = false,
                     Message = e.Message
                 });
             }

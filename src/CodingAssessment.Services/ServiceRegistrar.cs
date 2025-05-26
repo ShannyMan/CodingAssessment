@@ -17,6 +17,7 @@ namespace CodingAssessment.Services
             serviceCollection.AddSingleton<IWeatherService, WeatherService>(s =>
                 new WeatherService(s.GetService<IHttpDataService>() ?? throw new NullReferenceException("Service could not be resolved"), config)
             );
+            serviceCollection.AddSingleton<IFlightRouteService, FlightRouteService>();
         }
     }
 }
