@@ -1,5 +1,6 @@
 ﻿using CodingAssessment.Services.Interfaces;
 using CodingAssessment.Services.Models;
+using CodingAssessment.Web.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CodingAssessment.Web.Controllers
@@ -64,6 +65,12 @@ namespace CodingAssessment.Web.Controllers
                     Message = e.Message
                 });
             }
+        }
+        
+        [HttpGet("api/top-cities")]
+        public IActionResult GetTopUSCities()
+        {
+            return Ok(TopUSCities.GetTop50CitiesByPopulation());
         }
     }
 }

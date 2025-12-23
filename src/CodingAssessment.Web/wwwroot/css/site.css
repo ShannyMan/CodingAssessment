@@ -23,6 +23,11 @@ a {
   border-color: #1861ac;
 }
 
+.input-group {
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
 html {
   font-size: 14px;
 }
